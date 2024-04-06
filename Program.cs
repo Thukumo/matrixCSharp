@@ -165,11 +165,8 @@ namespace bin2imgs
                 if(i/fps*1000 < Curtime()-startedtime) skip = true;
                 else Thread.Sleep((int)((i/fps)*1000-(Curtime()-startedtime)));
             }
+            Console.Clear();
             Console.Write("\x1b[0m");
-            //Console.Clear();
-
-            //Console.WriteLine($"fps = {fps}, width = {width}, height = {height}");
-            //Environment.Exit(0);
             return 0;
         }
         public static void PlayAudioAsync(string videoFilePath)
