@@ -109,7 +109,7 @@ namespace bin2imgs
             while(startedtime == -1) Thread.Sleep(5);
             for(int i = 1; i < (int)cap.Get(VideoCaptureProperties.FrameCount); i++)
             {
-                (w, h) = (Console.WindowWidth, Console.WindowHeight);
+                (w, h) = (Console.WindowWidth, Console.WindowHeight-1);
                 if(h <= 1) h = 1;
                 if(capw/caph > w/h)
                 {
@@ -120,7 +120,7 @@ namespace bin2imgs
                     w = h*(capw/caph);
                 }
                 if(new_output && i != 1 && (w != lw || h != lh)) Console.Clear();
-                else if(new_output && i != 1) Console.WriteLine("\x1b["+lh.ToString()+"F");
+                else if(new_output && i != 1) Console.WriteLine("\x1b["+(lh+1).ToString()+"F");
                 using(var rframe = new Mat()) //ノリでusingに
                 {
                     while(!cap.Read(rframe))
@@ -148,7 +148,7 @@ namespace bin2imgs
                         for(int a = 0; a < 3; a++) old[a] = bgr[a];
                         text += "■";
                     }
-                    if(new_output && i != 1) Console.WriteLine("\x1b[K"+text);
+                    if(new_output && i != 1) Console.WriteLine("\x1b[2K"+text);
                     else if (new_output) Console.WriteLine(text);
                     else frametext += text + "\n";
                 }
