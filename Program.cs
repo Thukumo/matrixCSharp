@@ -1,8 +1,6 @@
 ﻿using System.CommandLine;
 using OpenCvSharp;
 using NAudio.Wave;
-using Microsoft.VisualBasic;
-using OpenCvSharp.XPhoto;
 
 namespace bin2imgs
 {
@@ -30,40 +28,31 @@ namespace bin2imgs
             string filename = "";
             bool new_output = false;
             int debug = -1;
-            //bool is_vailed = true;
             rootCommand.SetHandler((fileName, newOutput, debugOp) =>
             {
                 //Console.WriteLine($"filename = {fileName}");
-                //if (fileName == "") is_vailed = false;
                 if(fileName == "")
                 {
                     Console.Error.WriteLine("Please specify the name of a file to play.");
                     Environment.Exit(1);
                 }
+                debug = debugOp;
+                new_output = newOutput;
                 filename = fileName;
                 filename = Path.GetFullPath(filename);
                 if(!File.Exists(filename))
                 {
                     Console.Error.WriteLine($"File not found: {fileName}");
-                    //is_vailed = false;
                     Environment.Exit(1);
                 }
-                else
+                else if(debug != -1)
                 {
                     Console.WriteLine(filename);
                     Thread.Sleep(1500);
                 }
-                new_output = newOutput;
-                debug = debugOp;
             },
             filenamearg, newOption, debugOption);
             rootCommand.InvokeAsync(args).Wait();
-            /*
-            if(!is_vailed)
-            {
-                Environment.Exit(1);
-            }
-            */
             Console.CancelKeyPress += (sender, e) =>
             {
                 e.Cancel = true;
@@ -76,7 +65,6 @@ namespace bin2imgs
             if(!cap.IsOpened())
             {
                 Console.Error.WriteLine($"Failed to open file: {filename}");
-                //Console.Error.WriteLine("Your filename may contain strange characters. Now trying to find and rename the file...");
                 Console.Error.WriteLine("Name of the file may contain strange character(s). Please rename the file.");
                 /*
                 var regex = new Regex("^" + Regex.Escape(Path.GetFileName(filename)).Replace("\\?", ".") + "$");
@@ -103,7 +91,7 @@ namespace bin2imgs
             bool skip = false;
             int dropframe = 0;
             mythread.Start();
-            //mythread.IsBackground = true;
+            mythread.IsBackground = true;
             var fuga = cap.Get(VideoCaptureProperties.FrameCount);
             var frame = new Mat();
             while(startedtime == -1) Thread.Sleep(5);
@@ -158,8 +146,6 @@ namespace bin2imgs
                 else Thread.Sleep((int)((i/fps)*1000-(Curtime()-startedtime)));
             }
             cap.Dispose();
-            //mythread.Join();
-            mythread.Abort();
             Console.Clear();
             var hoge = Curtime();
             while(Curtime()-hoge < 1000) Console.WriteLine("\x1b[0m"); //たまに色が戻らないのでゴリ押し
