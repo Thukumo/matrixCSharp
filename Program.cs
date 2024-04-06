@@ -1,18 +1,6 @@
 ﻿using System.CommandLine;
-using System.CommandLine.Invocation;
-using System.CommandLine.IO;
-using System;
-using System.ComponentModel;
-using System.IO;
-using System.Threading;
-using System.Threading.Tasks;
 using OpenCvSharp;
-using System.Diagnostics;
 using NAudio.Wave;
-using System.Runtime.CompilerServices;
-using System.Transactions;
-using System.Text.RegularExpressions;
-using System.ComponentModel.DataAnnotations;
 
 namespace bin2imgs
 {
