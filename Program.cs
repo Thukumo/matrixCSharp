@@ -1,6 +1,8 @@
 ﻿using System.CommandLine;
 using OpenCvSharp;
 using NAudio.Wave;
+using Microsoft.VisualBasic;
+using OpenCvSharp.XPhoto;
 
 namespace bin2imgs
 {
@@ -28,31 +30,33 @@ namespace bin2imgs
             string filename = "";
             bool new_output = false;
             int debug = -1;
-            bool is_vailed = true;
+            //bool is_vailed = true;
             rootCommand.SetHandler((fileName, newOutput, debugOp) =>
             {
-                Console.WriteLine($"filename = {fileName}");
-                if (fileName == "") is_vailed = false;
+                //Console.WriteLine($"filename = {fileName}");
+                //if (fileName == "") is_vailed = false;
                 filename = fileName;
                 if(!File.Exists(filename))
                 {
                     Console.Error.WriteLine($"File not found: {filename}");
-                    is_vailed = false;
+                    //is_vailed = false;
                     Environment.Exit(1);
                 }
                 else
                 {
-                    Console.WriteLine(filename);
+                    //Console.WriteLine(filename);
                 }
                 new_output = newOutput;
                 debug = debugOp;
             },
             filenamearg, newOption, debugOption);
             rootCommand.InvokeAsync(args).Wait();
+            /*
             if(!is_vailed)
             {
                 Environment.Exit(1);
             }
+            */
             Console.CancelKeyPress += (sender, e) =>
             {
                 e.Cancel = true;
@@ -87,18 +91,17 @@ namespace bin2imgs
                 return 1;
             }
             double fps = cap.Get(VideoCaptureProperties.Fps);
-            int capw = (int)cap.Get(VideoCaptureProperties.FrameWidth);
+            int capw = (int)cap.Get(VideoCaptureProperties.FrameWidth)*2;
             int caph = (int)cap.Get(VideoCaptureProperties.FrameHeight);
             int w, h;
-            int lh = 0; //いらないけど怒られるの防ぐ用
+            int lh = 0, lw = 0; //いらないけど怒られるの防ぐ用
             bool skip = false;
             mythread.Start();
-            mythread.IsBackground = true;
+            //mythread.IsBackground = true;
             while(startedtime == -1) Thread.Sleep(5);
             for(int i = 1; i < (int)cap.Get(VideoCaptureProperties.FrameCount); i++)
             {
-                w = Console.WindowWidth;
-                h = Console.WindowHeight;
+                (w, h) = (Console.WindowWidth, Console.WindowHeight);
                 if(h <= 1) h = 1;
                 if(w/capw < h/caph)
                 {
@@ -108,8 +111,8 @@ namespace bin2imgs
                 {
                     w = capw*h/caph;
                 }
-                w*=2;
-                if(new_output && i != 1) Console.WriteLine("\x1b["+lh.ToString()+"F");
+                if(new_output && i != 1 && (w != lw || h != lh)) Console.Clear();
+                else if(new_output && i != 1) Console.WriteLine("\x1b["+lh.ToString()+"F");
                 var frame = new Mat();
                 using(var rframe = new Mat()) //ノリでusingに
                 {
@@ -141,11 +144,13 @@ namespace bin2imgs
                     else if (new_output) Console.WriteLine(text);
                     else frametext += text + "\n";
                 }
-                lh = h+2;
+                (lw, lh) = (w, h);
                 if(!new_output) Console.WriteLine(frametext);
                 if(i/fps*1000 < Curtime()-startedtime) skip = true;
                 else Thread.Sleep((int)((i/fps)*1000-(Curtime()-startedtime)));
             }
+            cap.Release();
+            mythread.Join();
             Console.Clear();
             var hoge = Curtime();
             while(Curtime()-hoge < 1000) Console.WriteLine("\x1b[0m"); //たまに色が戻らないのでゴリ押し
@@ -161,8 +166,10 @@ namespace bin2imgs
             player.Play();
             while(player.PlaybackState == PlaybackState.Playing && reader.CurrentTime < reader.TotalTime)
             {
-                Thread.Sleep(500);
+                Thread.Sleep(100);
             }
+            player.Dispose();
+            reader.Dispose();
         }
         public static long Curtime() //手抜き用
         {
