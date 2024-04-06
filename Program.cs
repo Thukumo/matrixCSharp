@@ -160,6 +160,8 @@ namespace bin2imgs
             //mythread.Abort();
             Console.Clear();
             Console.WriteLine("\x1b[0m");
+            var hoge = Curtime();
+            while(Curtime()-hoge < 1000) Console.WriteLine("\x1b[0m");
             Environment.Exit(0);
             return 0; //CS0161
         }
