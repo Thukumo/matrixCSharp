@@ -35,16 +35,23 @@ namespace bin2imgs
             {
                 //Console.WriteLine($"filename = {fileName}");
                 //if (fileName == "") is_vailed = false;
+                if(fileName == "")
+                {
+                    Console.Error.WriteLine("Please specify the name of a file to play.");
+                    Environment.Exit(1);
+                }
                 filename = fileName;
+                filename = Path.GetFullPath(filename);
                 if(!File.Exists(filename))
                 {
-                    Console.Error.WriteLine($"File not found: {filename}");
+                    Console.Error.WriteLine($"File not found: {fileName}");
                     //is_vailed = false;
                     Environment.Exit(1);
                 }
                 else
                 {
-                    //Console.WriteLine(filename);
+                    Console.WriteLine(filename);
+                    Thread.Sleep(3000);
                 }
                 new_output = newOutput;
                 debug = debugOp;
@@ -64,15 +71,13 @@ namespace bin2imgs
                 Console.Write("\x1b[0m");
                 Environment.Exit(0);
             };
-            filename = Path.GetFullPath(filename);
-            Console.WriteLine($"Waiting for open file: {filename}");
             var mythread = new Thread(() => PlayAudioAsync(filename));
             var cap = new VideoCapture(filename);
             if(!cap.IsOpened())
             {
                 Console.Error.WriteLine($"Failed to open file: {filename}");
                 //Console.Error.WriteLine("Your filename may contain strange characters. Now trying to find and rename the file...");
-                Console.Error.WriteLine("Your filename may contain strange characters. Please rename it.");
+                Console.Error.WriteLine("Name of the file may contain strange character(s). Please rename the file.");
                 /*
                 var regex = new Regex("^" + Regex.Escape(Path.GetFileName(filename)).Replace("\\?", ".") + "$");
                 var dirname = Path.GetDirectoryName(filename);
@@ -94,8 +99,9 @@ namespace bin2imgs
             int capw = (int)cap.Get(VideoCaptureProperties.FrameWidth)*2;
             int caph = (int)cap.Get(VideoCaptureProperties.FrameHeight);
             int w, h;
-            int lh = 0, lw = 0; //いらないけど怒られるの防ぐ用
+            (int lh, int lw) = (0, 0); //いらないけど怒られるの防ぐ用
             bool skip = false;
+            int dropframe = 0;
             mythread.Start();
             //mythread.IsBackground = true;
             while(startedtime == -1) Thread.Sleep(5);
@@ -122,6 +128,7 @@ namespace bin2imgs
                     }
                     if(skip)
                     {
+                        dropframe++;
                         skip = false;
                         continue;
                     }
@@ -154,6 +161,7 @@ namespace bin2imgs
             Console.Clear();
             var hoge = Curtime();
             while(Curtime()-hoge < 1000) Console.WriteLine("\x1b[0m"); //たまに色が戻らないのでゴリ押し
+            if(debug != -1) Console.WriteLine(dropframe);
             Environment.Exit(0);
             return 0; //CS0161
         }
