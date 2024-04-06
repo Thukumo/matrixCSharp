@@ -115,7 +115,7 @@ namespace bin2imgs
                 Console.WriteLine(Curtime());
             }
             //while(startedtime == -1) Thread.Sleep(5);
-            for(int i = 1; i <= (int)cap.Get(VideoCaptureProperties.FrameCount); i++)
+            for(int i = 1; i < (int)cap.Get(VideoCaptureProperties.FrameCount); i++)
             {
                 w = Console.WindowWidth;
                 h = Console.WindowHeight;
@@ -165,9 +165,11 @@ namespace bin2imgs
                 if(i/fps*1000 < Curtime()-startedtime) skip = true;
                 else Thread.Sleep((int)((i/fps)*1000-(Curtime()-startedtime)));
             }
+            mythread.Abort();
             Console.Clear();
-            Console.Write("\x1b[0m");
-            return 0;
+            Console.WriteLine("\x1b[0m");
+            Environment.Exit(0);
+            return 0; //CS0161
         }
         public static void PlayAudioAsync(string videoFilePath)
         {
