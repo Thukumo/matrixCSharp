@@ -153,7 +153,7 @@ namespace bin2imgs
                     for(int k = 0; k < w; k++)
                     {
                         var bgr = frame.At<Vec3b>(j, k);
-                        if(bgr[0] != old[0] || bgr[1] != old[1] || bgr[2] != old[2]) text += "\x1b[38;2;"+bgr[1].ToString()+";"+bgr[1].ToString()+";"+bgr[0].ToString()+"m";
+                        if(bgr[0] != old[0] || bgr[1] != old[1] || bgr[2] != old[2]) text += "\x1b[38;2;"+bgr[2].ToString()+";"+bgr[1].ToString()+";"+bgr[0].ToString()+"m";
                         text += "■";
                     }
                     if(new_output && i != 1) Console.WriteLine("\x1b[K"+text);
