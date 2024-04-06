@@ -148,7 +148,7 @@ namespace bin2imgs
             cap.Dispose();
             Console.Clear();
             var hoge = Curtime();
-            while(Curtime()-hoge < 1000) Console.WriteLine("\x1b[0m"); //たまに色が戻らないのでゴリ押し
+            while(Curtime()-hoge < 1000) Console.WriteLine("\x1b[0m"); //たまに色が戻らないのでゴリ押し 結局あんまり効いてないけど
             if(debug != -1) Console.WriteLine(dropframe/fuga*100);
             Environment.Exit(0);
             return 0; //CS0161
