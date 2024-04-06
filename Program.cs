@@ -158,10 +158,9 @@ namespace bin2imgs
                 if(i/fps*1000 < Curtime()-startedtime) skip = true;
                 else Thread.Sleep((int)((i/fps)*1000-(Curtime()-startedtime)));
             }
-            //mythread.Abort();
             Console.Clear();
             var hoge = Curtime();
-            while(Curtime()-hoge < 1000) Console.WriteLine("\x1b[0m");
+            while(Curtime()-hoge < 1000) Console.WriteLine("\x1b[0m"); //たまに色が戻らないのでゴリ押し
             Environment.Exit(0);
             return 0; //CS0161
         }
@@ -172,15 +171,9 @@ namespace bin2imgs
             player.Init(reader);
             startedtime = Curtime();
             player.Play();
-            /*
             while(player.PlaybackState == PlaybackState.Playing && reader.CurrentTime < reader.TotalTime)
             {
                 Thread.Sleep(500);
-            }
-            */
-            while(true)
-            {
-                Thread.Sleep(50000);
             }
         }
         public static long Curtime() //手抜き用
