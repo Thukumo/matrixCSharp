@@ -58,7 +58,6 @@ namespace bin2imgs
                 }
                 new_output = newOutput;
                 debug = debugOp;
-                //Environment.Exit(0);
             },
             filenamearg, newOption, debugOption);
             rootCommand.InvokeAsync(args).Wait();
@@ -68,13 +67,11 @@ namespace bin2imgs
             }
             Console.CancelKeyPress += (sender, e) =>
             {
-                e.Cancel = true; // プログラムの終了をキャンセル
-                //Console.WriteLine("Ctrl+C was pressed. Exiting...");
+                e.Cancel = true;
                 Console.Clear();
                 Console.Write("\x1b[0m");
                 Environment.Exit(0);
             };
-            //filename = "C:\\Users\\hoge\\Documents\\playground\\matrix\\RoughSketch ⧸ 777 (Official Videoclip) [xHuXXaXmStk].webm";
             filename = Path.GetFullPath(filename);
             Console.WriteLine($"Waiting for open file: {filename}");
             var mythread = new Thread(() => PlayAudioAsync(filename));
@@ -109,12 +106,7 @@ namespace bin2imgs
             bool skip = false;
             mythread.Start();
             mythread.IsBackground = true;
-            while(false)
-            {
-                Thread.Sleep(1000);
-                Console.WriteLine(Curtime());
-            }
-            //while(startedtime == -1) Thread.Sleep(5);
+            while(startedtime == -1) Thread.Sleep(5);
             for(int i = 1; i < (int)cap.Get(VideoCaptureProperties.FrameCount); i++)
             {
                 w = Console.WindowWidth;
@@ -160,12 +152,12 @@ namespace bin2imgs
                     else if (new_output) Console.WriteLine(text);
                     else frametext += text + "\n";
                 }
-                lh = h+1;
+                lh = h+2;
                 if(!new_output) Console.WriteLine(frametext);
                 if(i/fps*1000 < Curtime()-startedtime) skip = true;
                 else Thread.Sleep((int)((i/fps)*1000-(Curtime()-startedtime)));
             }
-            mythread.Abort();
+            //mythread.Abort();
             Console.Clear();
             Console.WriteLine("\x1b[0m");
             Environment.Exit(0);
@@ -178,9 +170,15 @@ namespace bin2imgs
             player.Init(reader);
             startedtime = Curtime();
             player.Play();
+            /*
             while(player.PlaybackState == PlaybackState.Playing && reader.CurrentTime < reader.TotalTime)
             {
                 Thread.Sleep(500);
+            }
+            */
+            while(true)
+            {
+                Thread.Sleep(50000);
             }
         }
         public static long Curtime() //手抜き用

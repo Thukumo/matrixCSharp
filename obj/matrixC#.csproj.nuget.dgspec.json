@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "c:\\Users\\hoge\\Documents\\playground\\matrixC#\\matrixC#.csproj": {}
+    "C:\\Users\\hoge\\Documents\\playground\\matrixC#\\matrixC#.csproj": {}
   },
   "projects": {
-    "c:\\Users\\hoge\\Documents\\playground\\matrixC#\\matrixC#.csproj": {
+    "C:\\Users\\hoge\\Documents\\playground\\matrixC#\\matrixC#.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "c:\\Users\\hoge\\Documents\\playground\\matrixC#\\matrixC#.csproj",
+        "projectUniqueName": "C:\\Users\\hoge\\Documents\\playground\\matrixC#\\matrixC#.csproj",
         "projectName": "matrixC#",
-        "projectPath": "c:\\Users\\hoge\\Documents\\playground\\matrixC#\\matrixC#.csproj",
+        "projectPath": "C:\\Users\\hoge\\Documents\\playground\\matrixC#\\matrixC#.csproj",
         "packagesPath": "C:\\Users\\hoge\\.nuget\\packages\\",
-        "outputPath": "c:\\Users\\hoge\\Documents\\playground\\matrixC#\\obj\\",
+        "outputPath": "C:\\Users\\hoge\\Documents\\playground\\matrixC#\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
