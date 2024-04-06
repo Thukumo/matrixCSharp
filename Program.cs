@@ -51,7 +51,7 @@ namespace bin2imgs
                 else
                 {
                     Console.WriteLine(filename);
-                    Thread.Sleep(3000);
+                    Thread.Sleep(1500);
                 }
                 new_output = newOutput;
                 debug = debugOp;
@@ -104,22 +104,23 @@ namespace bin2imgs
             int dropframe = 0;
             mythread.Start();
             //mythread.IsBackground = true;
+            var fuga = cap.Get(VideoCaptureProperties.FrameCount);
+            var frame = new Mat();
             while(startedtime == -1) Thread.Sleep(5);
             for(int i = 1; i < (int)cap.Get(VideoCaptureProperties.FrameCount); i++)
             {
                 (w, h) = (Console.WindowWidth, Console.WindowHeight);
                 if(h <= 1) h = 1;
-                if(w/capw < h/caph)
+                if(capw/caph > w/h)
                 {
-                    h = caph*w/capw;
+                    h = w/(capw/caph);
                 }
                 else
                 {
-                    w = capw*h/caph;
+                    w = h*(capw/caph);
                 }
                 if(new_output && i != 1 && (w != lw || h != lh)) Console.Clear();
                 else if(new_output && i != 1) Console.WriteLine("\x1b["+lh.ToString()+"F");
-                var frame = new Mat();
                 using(var rframe = new Mat()) //ノリでusingに
                 {
                     while(!cap.Read(rframe))
@@ -156,12 +157,13 @@ namespace bin2imgs
                 if(i/fps*1000 < Curtime()-startedtime) skip = true;
                 else Thread.Sleep((int)((i/fps)*1000-(Curtime()-startedtime)));
             }
-            cap.Release();
-            mythread.Join();
+            cap.Dispose();
+            //mythread.Join();
+            mythread.Abort();
             Console.Clear();
             var hoge = Curtime();
             while(Curtime()-hoge < 1000) Console.WriteLine("\x1b[0m"); //たまに色が戻らないのでゴリ押し
-            if(debug != -1) Console.WriteLine(dropframe);
+            if(debug != -1) Console.WriteLine(dropframe/fuga*100);
             Environment.Exit(0);
             return 0; //CS0161
         }
