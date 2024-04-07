@@ -7,7 +7,7 @@ namespace bin2imgs
     public class Program
     {
         static long startedtime = -1;
-        public static int Main(string[] args)
+        public static void Main(string[] args)
         {
             var rootCommand = new RootCommand("MatrixC#");
             rootCommand.Description = "ビデオプレイヤー on ターミナル C#版";
@@ -81,7 +81,7 @@ namespace bin2imgs
                     Environment.Exit(1);
                 }
                 */
-                return 1;
+                Environment.Exit(1);
             }
             double fps = cap.Get(VideoCaptureProperties.Fps);
             int capw = (int)cap.Get(VideoCaptureProperties.FrameWidth)*2;
@@ -95,7 +95,7 @@ namespace bin2imgs
             var fuga = cap.Get(VideoCaptureProperties.FrameCount);
             var frame = new Mat();
             while(startedtime == -1) Thread.Sleep(5);
-            for(int i = 1; i < (int)cap.Get(VideoCaptureProperties.FrameCount); i++)
+            checked{for(int i = 1; i < (int)cap.Get(VideoCaptureProperties.FrameCount); i++)
             {
                 (w, h) = (Console.WindowWidth, Console.WindowHeight-1);
                 if(h <= 1) h = 1;
@@ -145,13 +145,13 @@ namespace bin2imgs
                 if(i/fps*1000 < Curtime()-startedtime) skip = true;
                 else Thread.Sleep((int)((i/fps)*1000-(Curtime()-startedtime)));
             }
+            }
             cap.Dispose();
             Console.Clear();
             var hoge = Curtime();
             while(Curtime()-hoge < 1000) Console.WriteLine("\x1b[0m"); //たまに色が戻らないのでゴリ押し 結局あんまり効いてないけど
             if(debug != -1) Console.WriteLine(dropframe/fuga*100);
             Environment.Exit(0);
-            return 0; //CS0161
         }
         public static void PlayAudioAsync(string videoFilePath)
         {
