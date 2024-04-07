@@ -11,8 +11,7 @@ namespace bin2imgs
         {
             var rootCommand = new RootCommand("MatrixC#");
             rootCommand.Description = "ビデオプレイヤー on ターミナル C#版";
-            var filenamearg = new Argument<string>("file-name");
-            filenamearg.SetDefaultValue("");
+            var filenamearg = new Argument<string?>("file-name");
             rootCommand.Add(filenamearg);
             /*
             var grayOption = new Option<bool>(new[] { "-g", "--grayscale" }, "モノクロで出力します。");
@@ -31,7 +30,7 @@ namespace bin2imgs
             rootCommand.SetHandler((fileName, newOutput, debugOp) =>
             {
                 //Console.WriteLine($"filename = {fileName}");
-                if(fileName == "")
+                if(fileName == null)
                 {
                     Console.Error.WriteLine("Please specify the name of a file to play.");
                     Environment.Exit(1);
